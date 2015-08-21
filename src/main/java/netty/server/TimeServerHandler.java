@@ -5,6 +5,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import netty.model.UnixTime;
 
 /**
  * package: netty.server <br/>
@@ -19,6 +20,8 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     //当客户端和服务器的连接已建立将会调用channelActive()方法。在这方法中我们向客户端发送一个当前时间的32位整数。
     public void channelActive(final ChannelHandlerContext ctx) {
+        /*
+        //version1.0
         //要发送新消息，我们需要一个新的buffer来存放消息。我们要写入一个32位的整数，因此我们需要一个4字节大小的ByteBuf。我们通过ChannelHandlerContext.alloc()来获取当前的ByteBufAllocator并且申请一个新的buffer。
         final ByteBuf time = ctx.alloc().buffer(4);
         time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
@@ -29,7 +32,9 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
                 assert f == future;
                 ctx.close();
             }
-        }); //当write操作完成后会如何通知我们？只需要向ChannelFuture添加ChannelFutureListener。上面的例子中我们创建了一个新的匿名ChannelFutureListener来监听操作完成后关闭相应的Channel.另外，我们也可以使用一个预定义的listener来完成上述操作:f.addListener(ChannelFutureListener.CLOSE);
+        }); //当write操作完成后会如何通知我们？只需要向ChannelFuture添加ChannelFutureListener。上面的例子中我们创建了一个新的匿名ChannelFutureListener来监听操作完成后关闭相应的Channel.另外，我们也可以使用一个预定义的listener来完成上述操作:f.addListener(ChannelFutureListener.CLOSE);*/
+        ChannelFuture f = ctx.writeAndFlush(new UnixTime());
+        f.addListener(ChannelFutureListener.CLOSE);
     }
 
     @Override

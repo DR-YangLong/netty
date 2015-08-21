@@ -39,7 +39,7 @@ public class TimeServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() { //我们总是为新连接到服务器的handler分配一个新的Channel. ChannelInitializer用于配置新生成的Channel, 就和你通过配置ChannelPipeline来配置Channel是一样的效果。考虑到应用程序的复杂性，你可以采用一个匿名类来向pipeline中添加更多的handler。
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new TimeServerHandler());
+                            ch.pipeline().addLast(new TimeEncoder(),new TimeServerHandler());
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)          // 你也可以向指定的Channel设置参数。由于我开发的是TCP/IP服务器，所以我们可以对socket设置诸如tcpNoDelay,keepAlive之类的参数。要了解更多有关ChannelOption的设置请参考相关的api 文档。
